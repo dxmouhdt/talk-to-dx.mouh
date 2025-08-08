@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Talk to dx mouh</title>
+  <meta name="description" content="Talk to dx mouh - دردش، اسول و فضفض مع dx mouh" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap');
+    :root{
+      --bg1: #0f1724;
+      --bg2: #020617;
+      --glass: rgba(255,255,255,0.04);
+      --accent1: linear-gradient(90deg,#6d28d9,#ec4899);
+    }
+    *{box-sizing:border-box;font-family:Inter, system-ui, Arial, sans-serif}
+    body{
+      margin:0;
+      min-height:100vh;
+      background: radial-gradient(1000px 600px at 10% 10%, rgba(124,58,237,0.15), transparent 10%),
+                  radial-gradient(800px 500px at 90% 90%, rgba(236,72,153,0.12), transparent 10%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:#e6eef8;
+      padding:28px;
+    }
+    .container{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:20px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;gap:14px;align-items:center}
+    .logo{
+      width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#8b5cf6,#f472b6);
+      display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:20px;box-shadow:0 6px 30px rgba(99,102,241,0.12);
+    }
+    h1{margin:0;font-size:22px;}
+    .subtitle{color:#b6c3d9;font-size:13px}
+    .card{background:var(--glass);backdrop-filter: blur(6px);padding:18px;border-radius:14px;box-shadow:0 8px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+    main.grid{display:grid;grid-template-columns:1fr 420px;gap:20px;align-items:start}
+    /* Chat area */
+    .chat-window{height:560px;display:flex;flex-direction:column}
+    .messages{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px}
+    .msg{max-width:78%;padding:10px 12px;border-radius:12px;line-height:1.4}
+    .msg.ai{align-self:flex-start;background:rgba(255,255,255,0.05)}
+    .msg.user{align-self:flex-end;background:linear-gradient(90deg,#2b6cb0,#0ea5a4);color:white}
+    .input-row{display:flex;gap:10px;margin-top:12px}
+    input[type="text"]{flex:1;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;outline:none}
+    button{padding:10px 14px;border-radius:12px;border:none;background:var(--accent1);color:white;font-weight:600;cursor:pointer}
+    /* Right column */
+    .right .embed-wrap{height:360px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+    .note{font-size:13px;color:#c9d7ea;margin-top:10px}
+    footer{margin-top:16px;text-align:center;color:#9fb0d0;font-size:13px}
+    /* responsive */
+    @media (max-width:920px){
+      main.grid{grid-template-columns:1fr; }
+      .right { order: 2; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">dx</div>
+        <div>
+          <h1>Talk to dx mouh</h1>
+          <div class="subtitle">دردش، اسول، وفضفض مع dx mouh — واجهة فخمة</div>
+        </div>
+      </div>
+      <div class="subtitle">© <span id="year"></span> Talk to dx mouh</div>
+    </header>
+
+    <main class="grid">
+      <section class="card chat-window" aria-label="Chat area">
+        <div id="messages" class="messages" role="log" aria-live="polite"></div>
+
+        <form id="chatForm" class="input-row" onsubmit="return false">
+          <input id="inputText" type="text" placeholder="اكتب سؤالك هنا..." autocomplete="off" />
+          <button id="sendBtn" type="button">إرسال</button>
+        </form>
+
+        <label style="display:flex;gap:8px;align-items:center;margin-top:8px">
+          <span style="font-size:13px;color:#9fb0d0">نوافق أن نسجل الرسالة بشكل مجهول لتحسين الخدمة (مطلوب للمراجعة)</span>
+        </label>
+      </section>
+
+      <aside class="card right">
+        <h3>النموذج (AI)</h3>
+        <div class="note">للحصول على ردود AI داخل الموقع، يمكنك إدماج نموذج جاهز من Hugging Face Spaces أو أي صفحة دردشة تدعم embed.</div>
+
+        <div class="embed-wrap" id="embedWrap">
+          <!-- Edit the HF_IFRAME_EMBED variable in the script below to put your Space -->
+          <iframe id="aiFrame" src="" title="AI embed" style="width:100%;height:100%;border:0"></iframe>
+        </div>
+
+        <div class="note">
+          خطوات سريعة: سجل في Hugging Face → اختار Space دردشة (Gradio) → اضغط Share → Copy embed URL → والصقها في ملف <code>index.html</code> (المتغير HF_IFRAME_EMBED).
+        </div>
+
+        <div style="margin-top:12px">
+          <strong>لو ما عندكش Space:</strong>
+          <div class="note">الموقع يعمل بدون نموذج داخلي؛ المستخدم يقدر يستعمل أي رابط خارجي أو تضيف مفتاح OpenAI في backend لاحقاً.</div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="card">
+    </footer>
+  </div>
+
+  <script>
+    // --- CONFIG: عدل هذي القيم قبل النشر ---
+    const HF_IFRAME_EMBED = ""; // مثال: "https://hf.space/embed/username/space-name/+"  <-- حط رابط الـ embed تاع الـ Space هنا
+    // const BACKEND_URL = "" // Removed logging backend; // مثال: "https://your-backend.onrender.com"  <-- لو نشطت backend، حط الرابط هنا (اختياري)
+    // ------------------------------------------------
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const messagesEl = document.getElementById('messages');
+    const input = document.getElementById('inputText');
+    const sendBtn = document.getElementById('sendBtn');
+    const aiFrame = document.getElementById('aiFrame');
+
+    // load local messages (only for demo)
+    const LOCAL_KEY = "talk_to_dx_messages_v1";
+    let msgs = JSON.parse(localStorage.getItem(LOCAL_KEY) || "[]");
+    function render(){
+      messagesEl.innerHTML = "";
+      msgs.forEach(m=>{
+        const d = document.createElement('div');
+        d.className = "msg " + (m.from==="ai" ? "ai" : "user");
+        d.textContent = m.text;
+        messagesEl.appendChild(d);
+      });
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+    render();
+
+    // set iframe if configured
+    if(HF_IFRAME_EMBED && HF_IFRAME_EMBED.trim().length>0){
+      aiFrame.src = HF_IFRAME_EMBED;
+    } else {
+      // show placeholder content
+      aiFrame.srcdoc = "<div style='font-family:Inter, Arial;display:flex;align-items:center;justify-content:center;height:100%;background:linear-gradient(180deg,#071026,#001119);color:#cfe8ff;font-size:15px;padding:20px;text-align:center'>مازال ماحطّيت رابط الـ Space. افتح ملف <strong>index.html</strong> وغيّر قيمة <code>HF_IFRAME_EMBED</code> إلى رابط embed تاع الـ Space باش يطلع هنا الردود.</div>";
+    }
+
+    sendBtn.addEventListener('click', async ()=>{
+      const text = input.value.trim();
+      if(!text) return;
+      // push locally for UX
+      msgs.push({from:"user", text});
+      render();
+      input.value = "";
+
+      // Save locally for simple log (demo)
+      localStorage.setItem(LOCAL_KEY, JSON.stringify(msgs));
+
+        try{
+          await fetch(BACKEND_URL + "/api/log", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+          });
+        }catch(e){
+          console.warn("failed to send to backend", e);
+        }
+      } else {
+        // If no backend, show a fake typing AI reply for demo
+        setTimeout(()=>{
+          const reply = {from:"ai", text: "عذرًا، لا يوجد نموذج مدمج. افتح الـ Space في الجنب أو ضع رابط embed."};
+          msgs.push(reply);
+          render();
+          localStorage.setItem(LOCAL_KEY, JSON.stringify(msgs));
+        }, 800);
+      }
+    });
+
+    // allow Enter to send
+    input.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter') { sendBtn.click(); e.preventDefault(); }
+    });
+  </script>
+</body>
+</html>
